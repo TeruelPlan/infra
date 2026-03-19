@@ -1,0 +1,18 @@
+# Secrets
+.env
+.env.*
+secrets/
+*.pem
+*.key
+*.crt
+
+# Data volumes (ne pas versionner les données locales)
+data/
+volumes/
+
+# Grafana provisioning auto-généré
+grafana/data/
+
+# OS
+.DS_Store
+Thumbs.db
