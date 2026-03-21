@@ -1,0 +1,19 @@
+# Dev environment overrides
+# Lighter resources, 1 replica, no HPA, debug logging
+
+defaults:
+  replicas: 1
+  resources:
+    requests:
+      memory: 256Mi
+      cpu: 100m
+    limits:
+      memory: 512Mi
+      cpu: 250m
+  hpa:
+    enabled: false
+  env:
+    - name: SPRING_PROFILES_ACTIVE
+      value: dev
+    - name: LOGGING_LEVEL_COM_PLANTOGETHER
+      value: DEBUG

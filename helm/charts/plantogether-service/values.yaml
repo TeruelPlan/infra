@@ -1,0 +1,54 @@
+# Default values for plantogether-service.
+# Override these in values/app/{service}.yaml
+
+image:
+  repository: ghcr.io/teruelplan/plantogether-service
+  tag: latest
+  pullPolicy: IfNotPresent
+
+replicas: 1
+
+service:
+  port: 8080
+
+grpc:
+  enabled: false
+  port: 9090
+
+ingress:
+  enabled: true
+  className: traefik
+  path: /api/v1
+
+resources:
+  requests:
+    memory: 256Mi
+    cpu: 250m
+  limits:
+    memory: 512Mi
+    cpu: 500m
+
+hpa:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 70
+
+probes:
+  readiness:
+    path: /actuator/health/readiness
+    initialDelaySeconds: 30
+    periodSeconds: 10
+  liveness:
+    path: /actuator/health/liveness
+    initialDelaySeconds: 60
+    periodSeconds: 30
+
+env: []
+  # - name: SPRING_PROFILES_ACTIVE
+  #   value: prod
+
+envFromSecret: plantogether-secrets
+
+serviceAccount:
+  create: false

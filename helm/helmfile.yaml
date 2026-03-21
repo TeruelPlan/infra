@@ -1,0 +1,173 @@
+repositories:
+  - name: bitnami
+    url: https://charts.bitnami.com/bitnami
+  - name: traefik
+    url: https://helm.traefik.io/traefik
+  - name: argo
+    url: https://argoproj.github.io/argo-helm
+  - name: grafana
+    url: https://grafana.github.io/helm-charts
+  - name: prometheus-community
+    url: https://prometheus-community.github.io/helm-charts
+  - name: minio
+    url: https://charts.min.io/
+
+environments:
+  dev:
+    values:
+      - environments/dev.yaml
+  staging:
+    values:
+      - environments/staging.yaml
+  prod:
+    values:
+      - environments/prod.yaml
+
+releases:
+  # ─── Infrastructure (wave 0) ────────────────────────────────────────────────
+  - name: traefik
+    namespace: traefik
+    chart: traefik/traefik
+    values:
+      - values/infra/traefik.yaml
+    labels:
+      tier: infra
+
+  - name: keycloak
+    namespace: infra
+    chart: bitnami/keycloak
+    values:
+      - values/infra/keycloak.yaml
+    labels:
+      tier: infra
+
+  - name: postgresql
+    namespace: infra
+    chart: bitnami/postgresql
+    values:
+      - values/infra/postgresql.yaml
+    labels:
+      tier: infra
+
+  - name: redis
+    namespace: infra
+    chart: bitnami/redis
+    values:
+      - values/infra/redis.yaml
+    labels:
+      tier: infra
+
+  - name: rabbitmq
+    namespace: infra
+    chart: bitnami/rabbitmq
+    values:
+      - values/infra/rabbitmq.yaml
+    labels:
+      tier: infra
+
+  - name: minio
+    namespace: infra
+    chart: minio/minio
+    values:
+      - values/infra/minio.yaml
+    labels:
+      tier: infra
+
+  - name: argocd
+    namespace: argocd
+    chart: argo/argo-cd
+    values:
+      - values/infra/argocd.yaml
+    labels:
+      tier: infra
+
+  # ─── Microservices (wave 1) ─────────────────────────────────────────────────
+  - name: trip-service
+    namespace: app
+    chart: ./charts/plantogether-service
+    values:
+      - values/app/trip-service.yaml
+    labels:
+      tier: app
+
+  - name: poll-service
+    namespace: app
+    chart: ./charts/plantogether-service
+    values:
+      - values/app/poll-service.yaml
+    labels:
+      tier: app
+
+  - name: destination-service
+    namespace: app
+    chart: ./charts/plantogether-service
+    values:
+      - values/app/destination-service.yaml
+    labels:
+      tier: app
+
+  - name: expense-service
+    namespace: app
+    chart: ./charts/plantogether-service
+    values:
+      - values/app/expense-service.yaml
+    labels:
+      tier: app
+
+  - name: task-service
+    namespace: app
+    chart: ./charts/plantogether-service
+    values:
+      - values/app/task-service.yaml
+    labels:
+      tier: app
+
+  - name: chat-service
+    namespace: app
+    chart: ./charts/plantogether-service
+    values:
+      - values/app/chat-service.yaml
+    labels:
+      tier: app
+
+  - name: notification-service
+    namespace: app
+    chart: ./charts/plantogether-service
+    values:
+      - values/app/notification-service.yaml
+    labels:
+      tier: app
+
+  - name: file-service
+    namespace: app
+    chart: ./charts/plantogether-service
+    values:
+      - values/app/file-service.yaml
+    labels:
+      tier: app
+
+
+  # ─── Monitoring (wave 2) ────────────────────────────────────────────────────
+  - name: kube-prometheus-stack
+    namespace: monitoring
+    chart: prometheus-community/kube-prometheus-stack
+    values:
+      - values/monitoring/kube-prometheus-stack.yaml
+    labels:
+      tier: monitoring
+
+  - name: loki
+    namespace: monitoring
+    chart: grafana/loki
+    values:
+      - values/monitoring/loki.yaml
+    labels:
+      tier: monitoring
+
+  - name: tempo
+    namespace: monitoring
+    chart: grafana/tempo
+    values:
+      - values/monitoring/tempo.yaml
+    labels:
+      tier: monitoring

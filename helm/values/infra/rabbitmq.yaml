@@ -1,0 +1,14 @@
+# Bitnami RabbitMQ
+auth:
+  username: plantogether
+  password: ""  # from secret
+
+persistence:
+  enabled: true
+  size: 5Gi
+
+extraConfiguration: |
+  default_vhost = /
+  default_permissions.configure = .*
+  default_permissions.read = .*
+  default_permissions.write = .*

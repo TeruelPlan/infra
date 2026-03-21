@@ -1,0 +1,17 @@
+image:
+  repository: ghcr.io/teruelplan/plantogether-task-service
+  tag: latest
+
+service:
+  port: 8085
+
+grpc:
+  enabled: true
+  port: 9085
+
+ingress:
+  path: /api/v1/trips
+
+env:
+  - name: SPRING_PROFILES_ACTIVE
+    value: prod

@@ -1,0 +1,17 @@
+image:
+  repository: ghcr.io/teruelplan/plantogether-file-service
+  tag: latest
+
+service:
+  port: 8088
+
+grpc:
+  enabled: true
+  port: 9088
+
+ingress:
+  path: /api/v1/files
+
+env:
+  - name: SPRING_PROFILES_ACTIVE
+    value: prod

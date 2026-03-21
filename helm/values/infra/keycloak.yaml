@@ -1,0 +1,21 @@
+# Bitnami Keycloak
+auth:
+  adminUser: admin
+  adminPassword: ""  # from secret
+
+ingress:
+  enabled: true
+  hostname: auth.plantogether.com
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.tls.certresolver: letsencrypt
+
+postgresql:
+  enabled: false  # use shared PostgreSQL
+
+externalDatabase:
+  host: postgresql.infra.svc.cluster.local
+  port: 5432
+  user: plantogether
+  password: ""  # from secret
+  database: keycloak

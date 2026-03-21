@@ -1,0 +1,68 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: 'plantogether-trip-service'
+    metrics_path: /actuator/prometheus
+    static_configs:
+      - targets: ['host.docker.internal:8081']
+    relabel_configs:
+      - target_label: service
+        replacement: trip-service
+
+  - job_name: 'plantogether-poll-service'
+    metrics_path: /actuator/prometheus
+    static_configs:
+      - targets: ['host.docker.internal:8082']
+    relabel_configs:
+      - target_label: service
+        replacement: poll-service
+
+  - job_name: 'plantogether-destination-service'
+    metrics_path: /actuator/prometheus
+    static_configs:
+      - targets: ['host.docker.internal:8083']
+    relabel_configs:
+      - target_label: service
+        replacement: destination-service
+
+  - job_name: 'plantogether-expense-service'
+    metrics_path: /actuator/prometheus
+    static_configs:
+      - targets: ['host.docker.internal:8084']
+    relabel_configs:
+      - target_label: service
+        replacement: expense-service
+
+  - job_name: 'plantogether-task-service'
+    metrics_path: /actuator/prometheus
+    static_configs:
+      - targets: ['host.docker.internal:8085']
+    relabel_configs:
+      - target_label: service
+        replacement: task-service
+
+  - job_name: 'plantogether-chat-service'
+    metrics_path: /actuator/prometheus
+    static_configs:
+      - targets: ['host.docker.internal:8086']
+    relabel_configs:
+      - target_label: service
+        replacement: chat-service
+
+  - job_name: 'plantogether-notification-service'
+    metrics_path: /actuator/prometheus
+    static_configs:
+      - targets: ['host.docker.internal:8087']
+    relabel_configs:
+      - target_label: service
+        replacement: notification-service
+
+  - job_name: 'plantogether-file-service'
+    metrics_path: /actuator/prometheus
+    static_configs:
+      - targets: ['host.docker.internal:8088']
+    relabel_configs:
+      - target_label: service
+        replacement: file-service

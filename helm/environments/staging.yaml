@@ -1,0 +1,10 @@
+# Staging environment overrides
+# Production-like but reduced resources
+
+defaults:
+  replicas: 1
+  hpa:
+    enabled: false
+  env:
+    - name: SPRING_PROFILES_ACTIVE
+      value: staging

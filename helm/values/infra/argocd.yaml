@@ -1,0 +1,17 @@
+# ArgoCD
+server:
+  ingress:
+    enabled: true
+    ingressClassName: traefik
+    hostname: argocd.plantogether.com
+    annotations:
+      traefik.ingress.kubernetes.io/router.entrypoints: websecure
+      traefik.ingress.kubernetes.io/router.tls.certresolver: letsencrypt
+
+configs:
+  params:
+    server.insecure: false
+  repositories:
+    plantogether-infra:
+      url: https://github.com/TeruelPlan/plantogether-infra
+      type: git

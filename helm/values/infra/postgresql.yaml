@@ -1,0 +1,22 @@
+# Bitnami PostgreSQL
+auth:
+  postgresPassword: ""  # from secret
+  username: plantogether
+  password: ""          # from secret
+  database: plantogether_trip
+
+primary:
+  initdb:
+    scripts:
+      init.sql: |
+        CREATE DATABASE plantogether_poll;
+        CREATE DATABASE plantogether_destination;
+        CREATE DATABASE plantogether_expense;
+        CREATE DATABASE plantogether_task;
+        CREATE DATABASE plantogether_chat;
+        CREATE DATABASE plantogether_notification;
+        CREATE DATABASE keycloak;
+
+  persistence:
+    enabled: true
+    size: 10Gi

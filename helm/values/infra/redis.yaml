@@ -1,0 +1,7 @@
+# Bitnami Redis
+architecture: standalone
+auth:
+  enabled: false  # internal cluster only
+master:
+  persistence:
+    enabled: false

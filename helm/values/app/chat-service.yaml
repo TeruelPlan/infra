@@ -1,0 +1,16 @@
+image:
+  repository: ghcr.io/teruelplan/plantogether-chat-service
+  tag: latest
+
+service:
+  port: 8086
+
+grpc:
+  enabled: false
+
+ingress:
+  path: /ws
+
+env:
+  - name: SPRING_PROFILES_ACTIVE
+    value: prod

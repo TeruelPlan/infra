@@ -1,0 +1,12 @@
+# MinIO
+rootUser: minioadmin
+rootPassword: ""  # from secret
+
+buckets:
+  - name: plantogether
+    policy: none
+    purge: false
+
+persistence:
+  enabled: true
+  size: 20Gi

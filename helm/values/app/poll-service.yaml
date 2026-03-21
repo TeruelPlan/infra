@@ -1,0 +1,17 @@
+image:
+  repository: ghcr.io/teruelplan/plantogether-poll-service
+  tag: latest
+
+service:
+  port: 8082
+
+grpc:
+  enabled: true
+  port: 9082
+
+ingress:
+  path: /api/v1/trips
+
+env:
+  - name: SPRING_PROFILES_ACTIVE
+    value: prod

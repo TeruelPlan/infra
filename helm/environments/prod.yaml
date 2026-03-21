@@ -1,0 +1,22 @@
+# Production environment overrides
+# 2+ replicas, HPA enabled, full resources
+
+defaults:
+  replicas: 2
+  resources:
+    requests:
+      memory: 384Mi
+      cpu: 250m
+    limits:
+      memory: 768Mi
+      cpu: 500m
+  hpa:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 5
+    targetCPUUtilizationPercentage: 70
+  env:
+    - name: SPRING_PROFILES_ACTIVE
+      value: prod
+    - name: MANAGEMENT_TRACING_SAMPLING_PROBABILITY
+      value: "0.1"

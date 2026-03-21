@@ -1,0 +1,16 @@
+image:
+  repository: ghcr.io/teruelplan/plantogether-notification-service
+  tag: latest
+
+service:
+  port: 8087
+
+grpc:
+  enabled: false
+
+ingress:
+  path: /api/v1/notifications
+
+env:
+  - name: SPRING_PROFILES_ACTIVE
+    value: prod

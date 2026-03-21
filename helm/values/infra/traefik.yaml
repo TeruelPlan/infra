@@ -1,0 +1,30 @@
+# Traefik Ingress Controller
+ingressClass:
+  enabled: true
+  isDefaultClass: true
+
+ports:
+  web:
+    port: 80
+    redirectTo:
+      port: websecure
+  websecure:
+    port: 443
+    tls:
+      enabled: true
+
+certResolvers:
+  letsencrypt:
+    email: admin@plantogether.com
+    tlsChallenge: true
+
+service:
+  type: NodePort  # Kind cluster
+  nodePorts:
+    web: 30080
+    websecure: 30443
+
+additionalArguments:
+  - "--api.insecure=false"
+  - "--api.dashboard=true"
+  - "--log.level=INFO"

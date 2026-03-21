@@ -1,0 +1,11 @@
+apiVersion: 1
+
+providers:
+  - name: PlanTogether
+    orgId: 1
+    folder: PlanTogether
+    type: file
+    disableDeletion: false
+    updateIntervalSeconds: 30
+    options:
+      path: /var/lib/grafana/dashboards
