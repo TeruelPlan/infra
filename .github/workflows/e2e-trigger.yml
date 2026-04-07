@@ -1,0 +1,26 @@
+name: Trigger E2E
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Target environment'
+        default: staging
+      image_tag:
+        description: 'Image tag to test'
+        default: latest
+  repository_dispatch:
+    types: [services-deployed]
+
+jobs:
+  trigger:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dispatch E2E run
+        # Requires PAT_E2E_TRIGGER secret (repo scope on TeruelPlan/plantogether-e2e)
+        run: |
+          curl -X POST \
+            -H "Authorization: token ${{ secrets.PAT_E2E_TRIGGER }}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            https://api.github.com/repos/TeruelPlan/plantogether-e2e/dispatches \
+            -d '{"event_type":"run-e2e","client_payload":{"image_tag":"${{ github.event.inputs.image_tag || github.event.client_payload.image_tag || \"latest\" }}"}}'
