@@ -1,5 +1,5 @@
 # MinIO
-rootUser: minioadmin
+rootUser: ""  # from secret
 rootPassword: ""  # from secret
 
 buckets:
