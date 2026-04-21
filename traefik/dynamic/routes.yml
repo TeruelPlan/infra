@@ -1,0 +1,124 @@
+http:
+  routers:
+    # ── Nested overrides (priority 100) ──────────────────────────────────────
+    # These must match before the generic /api/v1/trips/** rule
+
+    trips-polls:
+      rule: "PathRegexp(`^/api/v1/trips/[^/]+/polls`)"
+      priority: 100
+      entryPoints: [web]
+      service: poll-service
+
+    trips-destinations:
+      rule: "PathRegexp(`^/api/v1/trips/[^/]+/destinations`)"
+      priority: 100
+      entryPoints: [web]
+      service: destination-service
+
+    trips-expenses:
+      rule: "PathRegexp(`^/api/v1/trips/[^/]+/expenses`)"
+      priority: 100
+      entryPoints: [web]
+      service: expense-service
+
+    trips-tasks:
+      rule: "PathRegexp(`^/api/v1/trips/[^/]+/tasks`)"
+      priority: 100
+      entryPoints: [web]
+      service: task-service
+
+    # ── Base routes (priority 10) ─────────────────────────────────────────────
+
+    trips:
+      rule: "PathPrefix(`/api/v1/trips`) || PathPrefix(`/api/v1/users`)"
+      priority: 10
+      entryPoints: [web]
+      service: trip-service
+
+    polls:
+      rule: "PathPrefix(`/api/v1/polls`)"
+      priority: 10
+      entryPoints: [web]
+      service: poll-service
+
+    destinations:
+      rule: "PathPrefix(`/api/v1/destinations`)"
+      priority: 10
+      entryPoints: [web]
+      service: destination-service
+
+    expenses:
+      rule: "PathPrefix(`/api/v1/expenses`)"
+      priority: 10
+      entryPoints: [web]
+      service: expense-service
+
+    tasks:
+      rule: "PathPrefix(`/api/v1/tasks`)"
+      priority: 10
+      entryPoints: [web]
+      service: task-service
+
+    files:
+      rule: "PathPrefix(`/api/v1/files`)"
+      priority: 10
+      entryPoints: [web]
+      service: file-service
+
+    notifications:
+      rule: "PathPrefix(`/api/v1/notifications`)"
+      priority: 10
+      entryPoints: [web]
+      service: notification-service
+
+    # ── WebSocket ─────────────────────────────────────────────────────────────
+    # Centralized STOMP hub: all real-time trip updates flow through
+    # notification-service on /ws. Each service publishes RabbitMQ events;
+    # notification-service consumes them and broadcasts STOMP frames.
+
+    ws:
+      rule: "PathPrefix(`/ws`)"
+      priority: 10
+      entryPoints: [web]
+      service: notification-service
+
+  services:
+    trip-service:
+      loadBalancer:
+        servers:
+          - url: "http://host.docker.internal:8081"
+
+    poll-service:
+      loadBalancer:
+        servers:
+          - url: "http://host.docker.internal:8082"
+
+    destination-service:
+      loadBalancer:
+        servers:
+          - url: "http://host.docker.internal:8083"
+
+    expense-service:
+      loadBalancer:
+        servers:
+          - url: "http://host.docker.internal:8084"
+
+    task-service:
+      loadBalancer:
+        servers:
+          - url: "http://host.docker.internal:8085"
+
+    chat-service:
+      loadBalancer:
+        servers:
+          - url: "http://host.docker.internal:8086"
+
+    notification-service:
+      loadBalancer:
+        servers:
+          - url: "http://host.docker.internal:8087"
+
+    file-service:
+      loadBalancer:
+        servers:
+          - url: "http://host.docker.internal:8088"
