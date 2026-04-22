@@ -18,6 +18,25 @@ volumes:
 services:
 
   # ─────────────────────────────────────────────────────────────────────────────
+  # Traefik — reverse proxy, routes /api/v1/* to the correct microservice
+  # Dashboard: http://localhost:8080
+  # ─────────────────────────────────────────────────────────────────────────────
+  traefik:
+    image: traefik:v3.0
+    profiles: [essential]
+    container_name: plantogether-traefik
+    ports:
+      - "80:80"
+      - "8080:8080"
+    volumes:
+      - ./traefik/traefik.yml:/etc/traefik/traefik.yml:ro
+      - ./traefik/dynamic:/etc/traefik/dynamic:ro
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - plantogether-network
+
+  # ─────────────────────────────────────────────────────────────────────────────
   # PostgreSQL — 8 bases isolées (une par microservice)
   # ─────────────────────────────────────────────────────────────────────────────
   postgres:
@@ -40,44 +59,6 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-
-  # ─────────────────────────────────────────────────────────────────────────────
-  # Keycloak — IAM, OIDC, SSO
-  # Port 8180 (évite le conflit avec la Gateway sur 8080)
-  # ─────────────────────────────────────────────────────────────────────────────
-  keycloak:
-    image: quay.io/keycloak/keycloak:24.0.3
-    profiles: [essential]
-    container_name: plantogether-keycloak
-    command: start-dev --import-realm
-    environment:
-      KC_DB: postgres
-      KC_DB_URL: jdbc:postgresql://postgres:5432/keycloak
-      KC_DB_USERNAME: postgres
-      KC_DB_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
-      KEYCLOAK_ADMIN: admin
-      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:-admin}
-      KC_HTTP_PORT: 8180
-      KC_HOSTNAME_STRICT: "false"
-      KC_HOSTNAME_STRICT_HTTPS: "false"
-      KC_LOG_LEVEL: INFO
-    ports:
-      - "8180:8180"
-    volumes:
-      - ./keycloak/realms:/opt/keycloak/data/import:ro
-      - ./keycloak/providers:/opt/keycloak/providers:ro
-    networks:
-      - plantogether-network
-    depends_on:
-      postgres:
-        condition: service_healthy
-    healthcheck:
-      test: ["CMD-SHELL", "curl -sf http://localhost:8180/realms/master || exit 1"]
-      interval: 30s
-      timeout: 10s
-      retries: 10
-      start_period: 60s
-
   # ─────────────────────────────────────────────────────────────────────────────
   # RabbitMQ — broker d'événements asynchrones (Topic Exchange)
   # ─────────────────────────────────────────────────────────────────────────────
